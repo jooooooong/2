@@ -1,17 +1,21 @@
-# 소득 5분위별 가계수지 분석
-# 분석 목적: 소비자물가 상승률(CPI)과 소비 패턴 변화 비교 분석
-
 import pandas as pd
 import plotly.express as px
 import streamlit as st
 from datetime import datetime
+import chardet
 
 # ----------------------
 # 1. 데이터 로딩 및 전처리
 # ----------------------
 @st.cache_data
 def load_data():
-    df = pd.read_csv("소득5분위별_가구당_가계수지.csv", encoding="cp949")
+    # 인코딩 자동 감지
+    with open("소득5분위별_가구당_가계수지.csv", "rb") as f:
+        result = chardet.detect(f.read())
+    encoding = result['encoding']
+    print(f"Detected file encoding: {encoding}")
+
+    df = pd.read_csv("소득5분위별_가구당_가계수지.csv", encoding=encoding)
     df = df.drop([0])  # 불필요한 첫 번째 행 제거 (반복되는 헤더)
     df = df.rename(columns={df.columns[0]: "소득분위", df.columns[1]: "항목"})
     df = df[df["소득분위"].isin(['1분위', '2분위', '3분위', '4분위', '5분위'])]  # 전체 평균 제외
