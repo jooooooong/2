@@ -8,12 +8,14 @@ from datetime import datetime
 # ----------------------
 @st.cache_data
 def load_data():
+    filename = "소득5분위별_가구당_가계수지__전국_1인이상_실질__20250605122557.csv"
+
     try:
-        df = pd.read_csv("소득5분위별_가구당_가계수지.csv", encoding='utf-8-sig')
+        df = pd.read_csv(filename, encoding='utf-8-sig')
         st.success("✅ UTF-8-SIG로 읽기 성공")
     except:
         try:
-            df = pd.read_csv("소득5분위별_가구당_가계수지.csv", encoding='cp949')
+            df = pd.read_csv(filename, encoding='cp949')
             st.success("✅ CP949로 읽기 성공")
         except:
             st.error("❌ CSV 파일을 불러오지 못했습니다.")
@@ -63,7 +65,6 @@ st.markdown("""
 # ----------------------
 df = load_data()
 
-# 선택 옵션 확인용 로그
 if not df.empty:
     소득분위_list = df['소득분위'].unique().tolist()
     항목_list = df['항목'].unique().tolist()
@@ -75,7 +76,6 @@ if not df.empty:
     with col1:
         selected_소득분위 = st.selectbox("소득 분위 선택", 소득분위_list)
     with col2:
-        # 기본값이 존재하지 않을 경우를 대비
         기본값_후보 = ['소비지출', '식료품·비주류음료', '교통']
         유효한_기본값 = [항목 for 항목 in 기본값_후보 if 항목 in 항목_list]
         selected_항목 = st.multiselect("소비 항목 선택", 항목_list, default=유효한_기본값)
