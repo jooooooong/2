@@ -56,7 +56,10 @@ col1, col2 = st.columns(2)
 with col1:
     selected_소득분위 = st.selectbox("소득 분위 선택", 소득분위_list)
 with col2:
-    selected_항목 = st.multiselect("소비 항목 선택", 항목_list, default=['소비지출', '식료품·비주류음료', '교통'])
+    # default에 포함된 항목이 실제 항목 리스트에 있는지 확인
+    기본값_후보 = ['소비지출', '식료품·비주류음료', '교통']
+    유효한_기본값 = [항목 for 항목 in 기본값_후보 if 항목 in 항목_list]
+    selected_항목 = st.multiselect("소비 항목 선택", 항목_list, default=유효한_기본값)
 
 # ----------------------
 # 4. 시각화 데이터 처리
