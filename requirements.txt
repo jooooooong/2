@@ -1,6 +1,4 @@
-plotly
 streamlit
 pandas
-scikit-learn
-folium
-streamlit-folium
+numpy
+chardet
